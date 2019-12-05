@@ -31,7 +31,7 @@ a.e()
 ## Install
 
 ```
-npm i babel-plugin-shake-class-properties
+npm i -D babel-plugin-shake-class-properties
 ```
 
 ## Usage
