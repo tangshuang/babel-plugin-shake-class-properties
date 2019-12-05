@@ -1,0 +1,24 @@
+{
+  "name": "babel-plugin-shake-class-properties",
+  "version": "0.1.0",
+  "description": "Remove ES6 class's nouse properties/members",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangshuang/babel-plugin-shake-class-properties.git"
+  },
+  "keywords": [
+    "shake",
+    "class",
+    "property"
+  ],
+  "author": "tangshuang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangshuang/babel-plugin-shake-class-properties/issues"
+  },
+  "homepage": "https://github.com/tangshuang/babel-plugin-shake-class-properties#readme"
+}
