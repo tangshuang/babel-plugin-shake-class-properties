@@ -44,13 +44,12 @@ module.exports = {
   ...
   plugins: [
     ['babel-plugin-shake-class-properties', {
-      // the only properties we want to keep, other properties will be removed
+      // the only properties we want to keep, other properties will be removed (except constructor)
       retain: [
         {
           file: path.resolve(__dirname, 'node_modules/tyshemo/src/store.js'), // the file's absolute path to match
-          class: 'Store', // the class name which properties will be removed from
-          property: 'get', // the property which will be kept
-          // properties: ['update', 'set'], // the properties which will be kept
+          class: 'Store', // the class name from which properties will be removed
+          properties: ['update', 'set'], // the properties which will be kept
         },
       ],
       // the properties we want to remove, properties even in `retain` will be removed
@@ -58,8 +57,7 @@ module.exports = {
         {
           file: path.resolve(__dirname, 'node_modules/tyshemo/src/store.js'),
           class: 'Store',
-          property: 'update', // the property which will be removed
-          // properties: ['update', 'set'], // the properties which will be removed
+          properties: ['update', 'set'], // the properties which will be removed
         },
       ],
     }],
@@ -68,16 +66,55 @@ module.exports = {
 }
 ```
 
-## Notice
-
-Only ES6+ source class properties will be matched. The following situation will not work with this plugin:
+In a item string of `properties`, you can use `static` `async` `get` `set` `*` keywords to match certain properties, for example:
 
 ```js
 class A {
+  static a = 1 // 'static a'
+  get name() {} // 'get name'
+  set name() {} // 'set name'
+  * f() {} // '* f'
+  async fetch() {} // 'async fetch'
+  async * r() {} // 'async * r'
+  static async * p() {} // 'static async * p'
+  static get e() {} // 'static get e'
+}
+```
+
+If you do not pass the right pattern to match, the properties may not be removed/retained.
+
+## Notice
+
+Only ES6+ source class properties will be matched. The following situation will not work with this plugin. Computed properties will not work as possible:
+
+```js
+class A {
+  // will never be remove
   constructor() {
     // will not be realized
     this.a = '1'
   }
+
+  // will not be realized
+  [`some${a}`]() {}
+
+  // will not be realized
+  [Symbol('xxx')]() {}
+
+  // will be treated as dd
+  'dd'() {}
+
+  // will be treated as ["dd"]
+  ['dd']() {}
+
+  // will be treated as [dd]
+  [dd]() {}
+
+  // will be treated as [dd]
+  [dd] = 1
+
+  // will be treated as ["dd"]
+  ['dd'] = 1
 }
 
 // will not be realized
